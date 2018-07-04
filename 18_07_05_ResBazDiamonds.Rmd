@@ -1,0 +1,71 @@
+---
+title: "DiamondsPlot"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(tidyverse)
+summary(diamonds)
+dim(diamonds)
+str(diamonds)
+```
+
+## Exploring the diamonds data
+```{r}
+diamonds %>% ggplot(aes(x = table, y = price)) + geom_point()
+diamonds %>% ggplot(aes(x = x, y = price)) + geom_point()
+diamonds %>% ggplot(aes(x = y, y = price)) + geom_point()
+diamonds %>% ggplot(aes(x = z, y = price)) + geom_point()
+
+diamonds %>% ggplot(aes(x = carat, y = price)) + geom_point()
+diamonds %>% ggplot(aes(x = carat, y = price)) + geom_point(alpha = 0.1)
+
+diamonds %>% ggplot(aes(x = x, y = price)) + geom_point()
+diamonds %>% ggplot(aes(x = y, y = price)) + geom_point()
+diamonds %>% ggplot(aes(x = z, y = price)) + geom_point()
+```
+Categorical variables: cut and clarity
+```{r}
+diamonds %>% ggplot(aes(x = clarity, y = price)) + geom_boxplot()
+diamonds %>% ggplot(aes(x = cut, y = price)) + geom_boxplot()
+diamonds %>% ggplot(aes(x = cut, y = price)) + geom_violin()
+diamonds %>% ggplot(aes(x=clarity, fill = clarity)) + geom_bar()
+```
+
+Facetting
+```{r}
+diamonds %>%  ggplot(aes(x = carat, y = price)) + geom_point() + facet_grid(cut~clarity) + geom_smooth(method = "lm")
+```
+ Now add conditional on table
+```{r}
+diamonds %>% 
+  mutate(tabF = factor(table < median(table)))%>% 
+  ggplot(aes(x = carat, y = price, colour = tabF)) + geom_point() + facet_grid(.~cut) 
+```
+ 
+Now change coordinates and theme
+```{r}
+diamonds %>% ggplot(aes(x = cut, y = price)) + geom_boxplot()+ 
+  scale_y_log10() + theme_minimal()
+```
+
+Facetting with pretty theme
+```{r}
+diamonds %>%  ggplot(aes(x = carat, y = price)) + geom_point() + facet_grid(cut~clarity, scales = "free_x") + geom_smooth(method = "lm") + theme_bw()
+```
+Facetting with black theme
+```{r}
+diamonds %>%  ggplot(aes(x = carat, y = price)) + geom_point(col = "red") + facet_grid(cut~clarity, scales = "free_x") + geom_smooth(method = "lm") + theme_black()
+```
+```{r}
+diamonds %>% ggplot(aes(x = cut, y = price)) + geom_boxplot()+ 
+  scale_y_log10() + theme_dark()
+```
+Cox plot
+```{r}
+diamonds %>% ggplot(aes(x=clarity, fill = clarity)) + geom_bar(width = 1) + coord_polar()
+
+```
+
