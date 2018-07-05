@@ -25,6 +25,9 @@ diamonds %>% ggplot(aes(x = carat, y = price)) + geom_point(alpha = 0.1)
 diamonds %>% ggplot(aes(x = x, y = price)) + geom_point()
 diamonds %>% ggplot(aes(x = y, y = price)) + geom_point()
 diamonds %>% ggplot(aes(x = z, y = price)) + geom_point()
+#install.packages("hexbin")
+library("hexbin")
+diamonds %>% ggplot(aes(x = carat, y = price)) + geom_hex()
 ```
 Categorical variables: cut and clarity
 ```{r}
@@ -36,17 +39,21 @@ diamonds %>% ggplot(aes(x=clarity, fill = clarity)) + geom_bar()
 
 Facetting
 ```{r}
+diamonds %>%  ggplot(aes(x = carat, y = price)) + geom_point() + facet_grid(cut~clarity)
+
 diamonds %>%  ggplot(aes(x = carat, y = price)) + geom_point() + facet_grid(cut~clarity) + geom_smooth(method = "lm")
 ```
  Now add conditional on table
 ```{r}
 diamonds %>% 
-  mutate(tabF = factor(table < median(table)))%>% 
-  ggplot(aes(x = carat, y = price, colour = tabF)) + geom_point() + facet_grid(.~cut) 
+  mutate(TableIsSmall = factor(table < median(table)))%>% 
+  ggplot(aes(x = carat, y = price, colour = TableIsSmall)) + geom_point() + facet_grid(.~cut) 
 ```
  
 Now change coordinates and theme
 ```{r}
+diamonds %>% ggplot(aes(x = cut, y = price)) + geom_boxplot()+ 
+  scale_y_log10() 
 diamonds %>% ggplot(aes(x = cut, y = price)) + geom_boxplot()+ 
   scale_y_log10() + theme_minimal()
 ```
